@@ -7,7 +7,6 @@ Certains codes ont été écrits à l'arrache, et méritent d'être presque ré�
 - Librairies pour manipuler des structures de données complexes: Pandas, Xarray.
   Ici, j'utilise surtout Xarray, je suis tombé amoureux.
 - Netcdf4 : Pour ouvrir des fichiers au format NETCDF
-- 
 ## Modules pas nécessaire mais fortement recommandés  :
 - tqdm: Pour avoir de jolies barres de progression.
 - scanf : Pour "parser" des chaines de caractères de façon simple.
