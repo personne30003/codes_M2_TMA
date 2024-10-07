@@ -1,18 +1,21 @@
 # Fichiers de travail
-Ce repertoire regroupe tous les fichiers utilisés pendant mon stage.
+Ce repertoire regroupe tous les fichiers utilisés pendant mon stage. 
 
-## Notebooks Python
-- `Grachev_T2_TO5.ipynb`
-- `SEB_net_T2R.ipynb`
-- `Stabilite_T2_TO5-V2.ipynb`
-- `Stabilite_T2_TO5-V3.ipynb`
-- `Visualisation_snowfox_T2.ipynb`
-- `Variabilite_flux.ipynb`
-- `flux_T2_Left.ipynb`
-- `flux_T2_Right.ipynb`
--  `flux_T2_TO5.ipynb`
--  `rose_des_vents_IGE.ipynb`
--  `comparaison_flux_brut_vs_EC.ipynb`
+## Notebooks Python : 
+- `Grachev_T2_TO5.ipynb` : Tracé de profils verticaux sur T2, mesure de la hauteur du maximum de vent catabatique $z_{max}$ (inspiré de *[Grachev et al. 2016]*). Visualisation des spectres/cospectres de Fourier en période catabatique, essai de la méthode Bulk
+  **A FAIRE : Certaines parties du codes sont redondantes, donc pour raisons de lisibilité ce serait bien d'écrire des fonctions à la place**
+- `SEB_net_T2R.ipynb` : Mesure du bilan d'énergie en surface, calcul de la fonte à l'aide du radiomètre et du niveau 1 de T2R.
+- `Stabilite_T2_TO5-V2.ipynb` *nom à changer !* : Calcul des spectres MRD, mesure du gap spectral sur T2 (sur données brutes). **Fonctionne bien mais mal écrit. Utiliser de préférence la version suivante (quand elle sera finie)**
+- `Stabilite_T2_TO5-V3.ipynb` *nom à changer !* : Idem mais basé intégralement sur `xarray`, donc plus rapide et plus sûr que la version précédente
+  **A FAIRE : Finir de l'écrire. C'est pas très compliqué et ne devrait pas prendre trop de temps**
+- `Visualisation_snowfox_T2.ipynb` : Visualisation des données Basse-Fréquence (radiomètre, thermomètre CS215, cf tableau 1 de mon rapport)
+  **A FAIRE (facultatif) : Remplacer le dictionnaire `series` par un `DataFrame` `pandas`. Parce que là c'est moche et pas robuste**
+- `Variabilite_flux.ipynb` : Comparaison des flux turbulents entre les stations T2, T2R et T2L. Mesure de $z_{max}$ sur T2R et T2L (deux niveaux seulement).
+- `flux_T2_Left.ipynb` : Distribution des paramètres de stabilité ($R_b$ et $\frac{z}{L}$), comparaison des flux calculés sur 2min et 30min
+- `flux_T2_Right.ipynb` : Idem, avec test de la méthode Bulk, dépendance des flux vis à vis de la vitesse du vent et de la température. **Il s'agit du seul notebook où on a le flux de chaleur latente !**.
+-  `flux_T2_TO5.ipynb` : Idem que `flux_T2_Left.ipynb`, vérification des lois de similitude (flux gradient et flux-variance), contrôles qualitéq.
+-  `rose_des_vents_IGE.ipynb` : Tracé de la rose des vents, à partir de la station météo située sur le toit du bâtiment OSUG-B. Peut toujous servir...
+-  `comparaison_flux_brut_vs_EC.ipynb` : Comparaison des flux turbulents/grandeurs moyennes avec/sans prétraitement, sur T2 et sur des segments de 30min.
 ## Librairies (dont je suis l'auteur)
 - `MRD_vX.py` : Implémentation de l'algorithme de MRD, et détection du gap spectral, cf *[Vickers and Mahrt 2003]*.
   Selon les versions, l'algorithme de détection du gap spectral est modifié. Les exemples associés sont dans `MRD_vX_test.py`/`MRD_vX_test.ipynb`. Le jeu de données utilisé est disponible [ici](http://servdap.legi.grenoble-inp.fr/opendap/hyrax/meige/22_TP_TMA/TP09_CLA_MONTAGNE/DATA_2023_3oct/sonicdata_2023_03_10.nc.dmr.html) (il s'agit d'un TP de M2).
@@ -27,23 +30,25 @@ Ce repertoire regroupe tous les fichiers utilisés pendant mon stage.
   **Instructions dans les commentaires en début de programme !**
 - `read_EddyPro_Output_v2.py` : Lecture des fichiers de sortie d'EddyPro (`full_output`, spectres, ogives), récupération de certaines variables dans d'autres fichiers de sortie ($\langle u'w'\rangle$ dans fichier `fluxnet` par exemple), conversion en fichiers NETCDF.
   **Instructions dans les commentaires en début de programme ! Le code fonctionne bien mais mérite d'être amélioré. Je peux toujours le faire sur demande ...**
-## Projets EddyPro
-
+## Projets EddyPro + fichiers `.METADATA`
+**A FAIRE : Normalement Jean-Emmanuel les a, mais dans le doute je peux toujours les remettre. Je peux éventuellement mettre les sorties (`metadata`, `full_output`, `fluxnet` et `qc_details uniquement`)**
 ## Bibliographie
-
+**A FAIRE : uploader toutes les publications utilisées (téléchargées légalement ou non) + fichier `.bib` de mon rapport (citations de toutes les publis citées).**
 ## Fichiers de données
-
+**A FAIRE : uploader tous les fichiers obtenus avec `read_EddyPro_Output_v2.py` + flux bruts calculés sur 30min**
 ## Infos en Vrac
-
+**A FAIRE : réuploader `tower2_log.pdf` et `hefex-notes`**
 ## Librairies nécessaires : 
-Tous les programmes sont écrits en **Python 3**. A part la bibliothèque standard, les librairies suivantes sont utilisés : 
-- Librairies de calcul scientifique de base : numpy/scipy/matplotlib.
-- Librairies de manipulation de données : pandas, xarray. Perso, j'utilise surtout xarray (documentation très bien faite [ici](https://docs.xarray.dev/en/stable/index.html) !)
-- Parseur de chaines de caractère : [scanf](https://pypi.org/project/scanf/).
-- Barres de progression : [tqdm](https://tqdm.github.io/)
-- Tracé de roses des vents : [windrose](https://python-windrose.github.io/windrose/)
+Tous les programmes sont écrits en langage **Python 3**. A part la bibliothèque standard, les librairies suivantes sont utilisés : 
+- Calcul scientifique de base : `numpy`/`scipy`/`matplotlib`.
+- Manipulation de données : `pandas`, `xarray`. Perso, j'utilise surtout `xarray` (documentation très bien faite [ici](https://docs.xarray.dev/en/stable/index.html) !)
+- Parseur de chaines de caractère : [`scanf`](https://pypi.org/project/scanf/).
+- Barres de progression : [`tqdm`](https://tqdm.github.io/)
+- Tracé de roses des vents : [`windrose`](https://python-windrose.github.io/windrose/)
 
 ## Conditions d'utilisation
-Faites ce que vous voulez de ces fichiers, a deux détails près :
-- Pas d'utilisation commerciale (même si on me verse une partie des bénéfices !)
+Faites ce que vous voulez de ces fichiers, à deux détails près :
+- Pas d'utilisation commerciale (même si je gagne tout/une partie des bénéfices !). 
 - Pas d'utilisation à des fins malveillantes.
+
+Le propriétaire de ce dépôt décline toute responsabilité en cas de dommages infligés au matériel ou à des tiers.
