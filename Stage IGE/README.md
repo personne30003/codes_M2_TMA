@@ -14,13 +14,13 @@ Ce repertoire regroupe tous les fichiers utilisés pendant mon stage.
 - `flux_T2_Left.ipynb` : Distribution des paramètres de stabilité ($R_b$ et $\frac{z}{L}$), comparaison des flux calculés sur 2min et 30min
 - `flux_T2_Right.ipynb` : Idem, avec test de la méthode Bulk, dépendance des flux vis à vis de la vitesse du vent et de la température. **Il s'agit du seul notebook où on a le flux de chaleur latente !**.
 -  `flux_T2_TO5.ipynb` : Idem que `flux_T2_Left.ipynb`, vérification des lois de similitude (flux gradient et flux-variance), contrôles qualitéq.
--  `rose_des_vents_IGE.ipynb` : Tracé de la rose des vents, à partir de la station météo située sur le toit du bâtiment OSUG-B. Peut toujous servir...
+-  `rose_des_vents_IGE.ipynb` : Tracé de la rose des vents, à partir de la station météo située sur le toit du bâtiment OSUG-B. Peut toujours servir...
 -  `comparaison_flux_brut_vs_EC.ipynb` : Comparaison des flux turbulents/grandeurs moyennes avec/sans prétraitement, sur T2 et sur des segments de 30min.
 ## Librairies (dont je suis l'auteur)
 - `MRD_vX.py` : Implémentation de l'algorithme de MRD, et détection du gap spectral, cf *[Vickers and Mahrt 2003]*.
   Selon les versions, l'algorithme de détection du gap spectral est modifié. Les exemples associés sont dans `MRD_vX_test.py`/`MRD_vX_test.ipynb`. Le jeu de données utilisé est disponible [ici](http://servdap.legi.grenoble-inp.fr/opendap/hyrax/meige/22_TP_TMA/TP09_CLA_MONTAGNE/DATA_2023_3oct/sonicdata_2023_03_10.nc.dmr.html) (il s'agit d'un TP de M2).
 
-  **A FAIRE : écrire une version définitive (et documentée) avec exemple. De nombreuses fonctions sont inutiles et doivent être supprimées. Rajouter les fonctions écrites dans `Stabilité_T2_TO5.ipynb` (tracé de spectres, utilisation de Xarray).** 
+  **A FAIRE : écrire une version définitive (et documentée) avec un exemple. De nombreuses fonctions sont inutiles et doivent être supprimées. Rajouter les fonctions écrites dans `Stabilité_T2_TO5-V2.ipynb` (tracé de spectres, utilisation de Xarray).** 
 
 - `Bulk.py` : Calcul des flux de chaleurs turbulents à l'aide de la méthode du Bulk aérodynamique (cf thèse de Maxime Litt, p55), calcul des rugosités de surface à partir des flux obtenus par EddyCovariance (à l'aide des formules précedentes). Quelques fonctions statistiques aussi ($RMSE$, $R^2$, etc...).
   **A FAIRE : Documenter !!**
@@ -37,11 +37,32 @@ Ce repertoire regroupe tous les fichiers utilisés pendant mon stage.
 ## Fichiers de données
 **A FAIRE : uploader tous les fichiers obtenus avec `read_EddyPro_Output_v2.py` + flux bruts calculés sur 30min**
 ## Infos en Vrac
-**A FAIRE : réuploader `tower2_log.pdf` et `hefex-notes`**
+Les anémomètres CSAT3B sont (en principe) alignés de façon anti-parallèle vent dominant. Concrètement, sur l'Hintereisferner, le vent souffle vers le Nord-Est donc, vers le bas de la pente. Les anémomètres sont donc (en principe) orientés vers le haut de la pente, c'est à dire vers le Sud-Ouest. En pratique, ils sont décalés de quelques dizaines degrés.
+
+Dans `tower2_log.pdf`, les directions ne se rapportent pas au Nord mais au Sud. Vu que j'ai tout rentré dans EddyPro sans réfléchir, les valeurs de direction du vent étaient décalées de 180 degrés par rapport aux valeurs "vraies". Donc, si vous voyez des trucs comme ça : 
+
+```python
+#correction manuelle pour la direction du vent
+T2_1_2min=T2_1_2min.assign(wind_dir=(T2_1_2min['wind_dir']+180)%360)
+```
+C'est tout à fait normal.
+
+Il me semble que pour T2R et T2L, j'ai oublié de demander à EddyPro de sortir un fichier de sortie `metadata`. Les hauteurs des instruments sont intégrées de cette façon : 
+```python
+z_1_30min = np.array([1.2 if date < np.datetime64("2023-09-06 09:00:00") else 1.05
+                        for date in T2R_1_30min.coords['temps'].values])
+z_T2_1_30min=xr.DataArray(data=z_1_30min,
+                         dims=['temps'],
+                         coords={'temps':('temps',T2R_1_30min.coords['temps'].values)})
+T2R_1_30min=T2R_1_30min.assign({'instrument_height':z_T2_1_30min})
+```
+C'est pas très beau, mais ça fonctionne.
+
+**A FAIRE : réuploader `tower2_log.pdf` et `hefex-notes`.**
 ## Librairies nécessaires : 
 Tous les programmes sont écrits en langage **Python 3**. A part la bibliothèque standard, les librairies suivantes sont utilisés : 
 - Calcul scientifique de base : `numpy`/`scipy`/`matplotlib`.
-- Manipulation de données : `pandas`, `xarray`. Perso, j'utilise surtout `xarray` (documentation très bien faite [ici](https://docs.xarray.dev/en/stable/index.html) !)
+- Manipulation de données : `pandas`, `xarray`. Perso, j'utilise surtout `xarray` ([documentation très bien faite](https://docs.xarray.dev/en/stable/index.html) !)
 - Parseur de chaines de caractère : [`scanf`](https://pypi.org/project/scanf/).
 - Barres de progression : [`tqdm`](https://tqdm.github.io/)
 - Tracé de roses des vents : [`windrose`](https://python-windrose.github.io/windrose/)
