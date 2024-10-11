@@ -39,13 +39,12 @@ Ce repertoire regroupe tous les fichiers utilisés pendant mon stage.
 ## Infos en Vrac
 Les anémomètres CSAT3B sont (en principe) alignés de façon anti-parallèle vent dominant. Concrètement, sur l'Hintereisferner, le vent souffle vers le Nord-Est donc, vers le bas de la pente. Les anémomètres sont donc (en principe) orientés vers le haut de la pente, c'est à dire vers le Sud-Ouest. En pratique, ils sont décalés de quelques dizaines degrés.
 
-Dans `tower2_log.pdf`, les directions ne se rapportent pas au Nord mais au Sud. Vu que j'ai tout rentré dans EddyPro sans réfléchir, les valeurs de direction du vent étaient décalées de 180 degrés par rapport aux valeurs "vraies". Donc, si vous voyez des trucs comme ça : 
+Dans `tower2_log.pdf`, les directions ne se rapportent pas au Nord mais au Sud. Vu que j'ai tout rentré dans EddyPro sans réfléchir, les valeurs de direction du vent étaient décalées de 180 degrés par rapport aux valeurs "vraies". On corrige les valeurs de cette façon : 
 
 ```python
 #correction manuelle pour la direction du vent
 T2_1_2min=T2_1_2min.assign(wind_dir=(T2_1_2min['wind_dir']+180)%360)
 ```
-C'est tout à fait normal.
 
 Il me semble que pour T2R et T2L, j'ai oublié de demander à EddyPro de sortir un fichier de sortie `metadata`. Les hauteurs des instruments sont intégrées de cette façon : 
 ```python
@@ -66,6 +65,7 @@ Tous les programmes sont écrits en langage **Python 3**. A part la bibliothèqu
 - Parseur de chaines de caractère : [`scanf`](https://pypi.org/project/scanf/).
 - Barres de progression : [`tqdm`](https://tqdm.github.io/)
 - Tracé de roses des vents : [`windrose`](https://python-windrose.github.io/windrose/)
+- Lecture/écriture de fichiers NETCDF [netcdf4](https://unidata.github.io/netcdf4-python/)
 
 ## Conditions d'utilisation
 Faites ce que vous voulez de ces fichiers, à deux détails près :
